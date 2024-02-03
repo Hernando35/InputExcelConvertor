@@ -83,7 +83,7 @@ public class ExcelDataServiceImp implements ExcelDataService {
 		return Optional.empty();
 	}
 
-	private Long convertToLong(Object value) {
+	public Long convertToLong(Object value) {
 		try {
 			if (value instanceof Long lon) {
 				return lon;
@@ -96,7 +96,7 @@ public class ExcelDataServiceImp implements ExcelDataService {
 		}
 	}
 
-	private Integer convertToInt(Object value) {
+	public Integer convertToInt(Object value) {
 		try {
 			if (value instanceof Integer integer) {
 				return integer;
