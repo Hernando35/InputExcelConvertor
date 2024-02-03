@@ -24,10 +24,10 @@ public class ExcelController {
 	}
 
 	@GetMapping("/index")
-	public String displayEmployees(Model model) {
-		List<Employee> employees = excelDataService.readExcel("src/main/resources/file.xlsx");
-		log.info("Number of employees: {}", employees.size());
-		model.addAttribute("employees", employees);
-		return "index";
-	}
+    public String displayEmployees(Model model) {
+        List<Employee> employees = excelDataService.readExcel("src/main/resources/file.xlsx");
+        log.info("Number of employees: {}", employees.size());
+        model.addAttribute("employees", employees);
+        return "employeeList"; // Specify the view name here
+    }
 }
