@@ -17,11 +17,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ExcelService implements ExcelDataService {
-	private static final Logger log = LoggerFactory.getLogger(ExcelService.class.getCanonicalName());
+public class ExcelDataServiceImp implements ExcelDataService {
+	private static final Logger log = LoggerFactory.getLogger(ExcelDataServiceImp.class.getCanonicalName());
+
+	private final EmployeeRepository repository;
 
 	@Autowired
-	private EmployeeRepository repository;
+	public ExcelDataServiceImp(EmployeeRepository repository) {
+		this.repository = repository;
+	}
 
 	public List<Employee> readExcel(String filePath) {
 		List<Employee> employees = new ArrayList<>();
@@ -47,7 +51,7 @@ public class ExcelService implements ExcelDataService {
 		return employees;
 	}
 
-	private Employee mapRowToEmployee(Row row)  {
+	private Employee mapRowToEmployee(Row row) {
 		Employee employee = new Employee();
 		setCellData(row.getCell(0), CellType.NUMERIC, value -> {
 			employee.setEmployee_id(convertToLong(value));
@@ -67,25 +71,24 @@ public class ExcelService implements ExcelDataService {
 	}
 
 	private Object getCellValue(Cell cell) {
-	    if (cell.getCellType() == CellType.STRING) {
-	        return cell.getStringCellValue();
-	    } else if (cell.getCellType() == CellType.NUMERIC) {
-	        if (DateUtil.isCellDateFormatted(cell)) {
-	            return Optional.of(cell.getDateCellValue());
-	        } else {
-	            return cell.getNumericCellValue();
-	        }
-	    }
-	    return Optional.empty();  
+		if (cell.getCellType() == CellType.STRING) {
+			return cell.getStringCellValue();
+		} else if (cell.getCellType() == CellType.NUMERIC) {
+			if (DateUtil.isCellDateFormatted(cell)) {
+				return Optional.of(cell.getDateCellValue());
+			} else {
+				return cell.getNumericCellValue();
+			}
+		}
+		return Optional.empty();
 	}
-
 
 	private Long convertToLong(Object value) {
 		try {
-			if (value instanceof Long) {
-				return (Long) value;
-			} else if (value instanceof Double) {
-				return ((Double) value).longValue();
+			if (value instanceof Long lon) {
+				return lon;
+			} else if (value instanceof Double d) {
+				return d.longValue();
 			}
 			return 0L; // Default value
 		} catch (IllegalArgumentException e) {
@@ -95,10 +98,10 @@ public class ExcelService implements ExcelDataService {
 
 	private Integer convertToInt(Object value) {
 		try {
-			if (value instanceof Integer) {
-				return (Integer) value;
-			} else if (value instanceof Double) {
-				return ((Double) value).intValue();
+			if (value instanceof Integer integer) {
+				return integer;
+			} else if (value instanceof Double d) {
+				return d.intValue();
 			}
 			return 0; // Default value
 		} catch (IllegalArgumentException e) {

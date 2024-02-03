@@ -12,21 +12,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.hernando.web.model.Employee;
 import com.hernando.web.service.ExcelDataService;
 
-
 @Controller
 public class ExcelController {
 	private static final Logger log = LoggerFactory.getLogger(ExcelController.class.getCanonicalName());
 
+	private final ExcelDataService excelDataService;
 
 	@Autowired
-	private ExcelDataService excelService;
+	public ExcelController(ExcelDataService excelDataService) {
+		this.excelDataService = excelDataService;
+	}
 
 	@GetMapping("/index")
 	public String displayEmployees(Model model) {
-        List<Employee> employees = excelService.readExcel("src/main/resources/file.xlsx");
-	    log.info("Number of employees: {}", employees.size());
-	    model.addAttribute("employees", employees);
-	    return "index";
+		List<Employee> employees = excelDataService.readExcel("src/main/resources/file.xlsx");
+		log.info("Number of employees: {}", employees.size());
+		model.addAttribute("employees", employees);
+		return "index";
 	}
 }
-
