@@ -28,6 +28,6 @@ public class ExcelController {
         List<Employee> employees = excelDataService.readExcel("src/main/resources/file.xlsx");
         log.info("Number of employees: {}", employees.size());
         model.addAttribute("employees", employees);
-        return "employeeList"; // Specify the view name here
+        return "index"; // Specify the view name here
     }
 }
